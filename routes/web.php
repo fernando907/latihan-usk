@@ -1,15 +1,16 @@
 <?php
 
-use App\Http\Controllers\View\Dashboard;
-use App\Http\Controllers\View\Peminjaman;
-use App\Http\Controllers\View\Profile;
-use App\Http\Controllers\View\DataAnggota;
-use App\Http\Controllers\View\DataBuku;
-use App\Http\Controllers\View\Laporan;
-use App\Http\Controllers\View\Pengembalian;
-use App\Http\Controllers\View\Pesan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\View\Dashboard;
+use App\Http\Controllers\View\DataAnggota;
+use App\Http\Controllers\View\DataBuku;
+use App\Http\Controllers\View\Pesan;
+use App\Http\Controllers\View\Laporan;
+use App\Http\Controllers\View\Profile;
+use App\Http\Controllers\View\Peminjaman;
+use App\Http\Controllers\View\Pengembalian;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('auth.login');
 });
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Auth::routes();
 
@@ -221,10 +224,3 @@ Route::group(
         );
     }
 );
-
-// Route::group(
-//     ['middleware' => 'auth'],
-//     function () {
-
-//     }
-// );
