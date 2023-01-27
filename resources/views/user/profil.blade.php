@@ -17,8 +17,12 @@
                 <div class="card-body">
                     <table class="table table-striped table bordered">
                         <tr>
-                            <th>Foto</th>                            <td>
-                                <img width="150px" height="150px" src="{{ asset(Auth::user()->photo) }}" alt="{{ asset(Auth::user()->photo) }}">
+                            <th>Foto</th>
+                            <td>
+                                @if (Auth::user()->photo)
+                                    <img width="150px" height="150px" src="{{ asset(Auth::user()->photo) }}"
+                                        alt="{{ asset(Auth::user()->photo) }}">
+                                @endif
                                 <input type="file" class="form-control mt-3" name="photo">
                             </td>
                         </tr>

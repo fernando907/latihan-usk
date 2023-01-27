@@ -12,6 +12,7 @@ use App\Http\Controllers\View\Profile;
 use App\Http\Controllers\View\Peminjaman;
 use App\Http\Controllers\View\Pengembalian;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -40,10 +41,20 @@ Route::group(
                 Route::group(
                     ['middleware' => 'role:admin'],
                     function () {
-                        Route::get(
-                            '/dashboard',
+                        Route::controller(Dashboard::class)->group(
+                            function () {
+                                Route::get(
+                                    '/dashboard',
                             [Dashboard::class, 'admin']
-                        )->name('admin.dashboard');
+                                )->name('admin.dashboard');
+                                Route::post('/nonactive-notif', 'nonactive_notif')->name('admin.nonactive_notif');
+                            }
+                        );
+
+                        Route::get(
+                            'pemberitahuan',
+                            [Pemberitahuan::class, 'pemberitahuan_admin']
+                        )->name('admin.pemberitahuan_admin');
 
                         Route::controller(DataAnggota::class)->group(
                             function () {
@@ -56,6 +67,7 @@ Route::group(
                                     'submit_admin',
                                     'submit_admin'
                                 )->name('admin.submit_admin');
+                                Route::put('/update-admin/{id}', 'update_profil')->name('admin.update_admin');
                                 Route::delete('/hapus-admin/{id}', 'hapus_admin')->name('admin.hapus_admin');
 
                                 // Anggota
@@ -67,6 +79,8 @@ Route::group(
                                     'submit_anggota',
                                     'submit_anggota'
                                 )->name('admin.submit_anggota');
+                                Route::post('/verif-user', 'verif_user')->name('admin.verif_user');
+                                Route::put('/update-anggota/{id}', 'update_profil')->name('admin.update_anggota');
                                 Route::delete('/hapus-anggota/{id}', 'hapus_anggota')->name('admin.hapus_anggota');
                             }
                         );
@@ -82,8 +96,9 @@ Route::group(
                                     'submit_penerbit',
                                     'submit_penerbit'
                                 )->name('admin.submit_penerbit');
+                                Route::put('/update-penerbit/{id}', 'update_penerbit')->name('admin.update_penerbit');
                                 Route::delete('/hapus-penerbit/{id}', 'hapus_penerbit')->name('admin.hapus_penerbit');
-                                
+
                                 // Kategori
                                 Route::get(
                                     '/kategori',
@@ -93,6 +108,7 @@ Route::group(
                                     'submit_kategori',
                                     'submit_kategori'
                                 )->name('admin.submit_kategori');
+                                Route::put('/update-kategori/{id}', 'update_kategori')->name('admin.update_kategori');
                                 Route::delete('/hapus-kategori/{id}', 'hapus_kategori')->name('admin.hapus_kategori');
 
                                 // Buku
@@ -104,6 +120,7 @@ Route::group(
                                     'submit_buku',
                                     'submit_buku'
                                 )->name('admin.submit_buku');
+                                Route::put('/update-buku/{id}', 'update_buku')->name('admin.update_buku');
                                 Route::delete('/hapus-buku/{id}', 'hapus_buku')->name('admin.hapus_buku');
                             }
                         );
@@ -143,6 +160,15 @@ Route::group(
                                     'profile',
                                     'update_profil'
                                 )->name('admin.profil.update');
+
+                                Route::get(
+                                    '/identitas-aplikasi',
+                                    'identitas_aplikasi'
+                                )->name('admin.identitas_aplikasi');
+                                Route::put(
+                                    'update-identitas/{id}',
+                                    'update_identitas'
+                                )->name('admin.update_identitas');
                             }
                         );
                     }
@@ -160,6 +186,11 @@ Route::group(
                             'dashboard',
                             [Dashboard::class, 'user']
                         )->name('user.dashboard');
+
+                        Route::get(
+                            'pemberitahuan',
+                            [Pemberitahuan::class, 'pemberitahuan_user']
+                        )->name('user.pemberitahuan_user');
 
                         Route::controller(Peminjaman::class)->group(
                             function () {
@@ -224,3 +255,10 @@ Route::group(
         );
     }
 );
+
+// Route::group(
+//     ['middleware' => 'auth'],
+//     function () {
+
+//     }
+// );

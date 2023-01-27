@@ -50,7 +50,6 @@ class DataAnggota extends Controller
             $imageName = time() . '.' . $request->photo->extension();
 
             $request->photo->move(public_path('img'), $imageName);
-            dd($request);
             try {
                 User::create([
                     'kode' => $generate_code,
@@ -125,7 +124,6 @@ class DataAnggota extends Controller
             $imageName = time() . '.' . $request->photo->extension();
 
             $request->photo->move(public_path('img'), $imageName);
-            dd($request);
             try {
                 User::create([
                     'kode' => $generate_code,
@@ -174,6 +172,50 @@ class DataAnggota extends Controller
             );
         }
         return redirect()->route('admin.data-admin')->with("status", "danger")->with('message', 'Gagal Menambah Admin');
+    }
+
+    // Update Data
+    public function verif_user(Request $request)
+    {
+        $verif = User::where('id', $request->id)->first();
+        $verif->update([
+            'verif' => 'verified'
+        ]);
+        return redirect()->back();
+    }
+    public function update_profil(Request $request, $id)
+    {
+        if ($request->photo != null) {
+            $imageName = time() . '.' . $request->photo->extension();
+
+            $request->photo->move(public_path('img'), $imageName);
+            $user = User::find($id)->update($request->all());
+
+            $user2 = User::find($id)->update([
+                "password" => Hash::make($request->password),
+                "photo" => "/img/" . $imageName
+            ]);
+
+            if ($user && $user2) {
+                return redirect()->back()->with("status", "success")->with(
+                    'message',
+                    'Berhasil Mengubah Profil'
+                );
+            }
+            return redirect()->back()->with("status", "danger")->with('message', 'Gagal Mengubah Profil');
+        }
+        $user = User::find($id)->update($request->all());
+        $user2 = User::find($id)->update([
+            "password" => Hash::make($request->password)
+        ]);
+
+        if ($user && $user2) {
+            return redirect()->back()->with("status", "success")->with(
+                'message',
+                'Berhasil Mengubah Profil'
+            );
+        }
+        return redirect()->back()->with("status", "danger")->with('message', 'Gagal Mengubah Profil');
     }
 
     // Delete Data

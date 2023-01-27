@@ -1,20 +1,35 @@
 @extends('layouts.user-layout')
 
 @section('content-user')
-    <div class="col-10">
+    <div class="col-12">
         <div class="">
             @foreach ($pemberitahuans as $pemberitahuan)
-                <div class="alert alert-primary col-9" role="alert">
-                    {{ $pemberitahuan->isi }}
-                </div>
+                @if ($pemberitahuans->count() > 3)
+                    {{ null }}
+                @else
+                    @if ($pemberitahuan->status == 'aktif')
+                        <div class="alert alert-primary col-12 d-flex justify-content-center" role="alert">
+                            {{ $pemberitahuan->isi }}
+                        </div>
+                    @elseif ($pemberitahuan->status == 'user')
+                        <div class="alert alert-info col-12 d-flex justify-content-center" role="alert">
+                            {{ $pemberitahuan->isi }}
+                        </div>
+                    @endif
+                @endif
             @endforeach
+            @if ($pemberitahuans->count() > 3)
+                <div class="alert alert-primary col-12 d-flex justify-content-center" role="alert">
+                    Silahkan cek pemberitahuan
+                </div>
+            @endif
             <div class="row">
                 @foreach ($bukus as $buku)
-                    <div class="col-3">
+                    <div class="col-4">
                         <div class="card">
                             <div class="card-header">
-                                <img src="{{ url('/img' . '/' . $buku->photo) }}" style="height: 150px;object-fit: cover;"
-                                    class="card-img" alt="{{ $buku->judul }}">
+                                <img src="{{ asset($buku->photo) }}" style="height: 150px;object-fit: cover;"
+                                    class="card-img" alt="{{ $buku->photo }}">
                             </div>
                             <div class="card-body">
                                 <h4 style="font-size: 24px; font-weight: bold">

@@ -4,7 +4,9 @@ namespace App\Http\Controllers\View;
 
 use App\Http\Controllers\Controller;
 use App\Models\Buku;
+use App\Models\Pemberitahuan;
 use App\Models\Peminjaman as ModelsPeminjaman;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +17,6 @@ class Peminjaman extends Controller
     {
         $peminjamans = ModelsPeminjaman::where(['user_id' => Auth::user()->id, 'done' => 0])->get();
 
-        // dd($peminjamans);
         return view('user.peminjaman', compact('peminjamans'));
     }
 
@@ -35,28 +36,41 @@ class Peminjaman extends Controller
         return view('user.form_peminjaman', compact('buku_id', 'bukus'));
     }
 
+    
     public function submit_peminjaman(Request $request)
     {
         $tanggal_peminjaman = $request->tanggal_peminjaman;
-        $y_return = explode("-", $tanggal_peminjaman)[0];
-        $m_return = explode("-", $tanggal_peminjaman)[1];
-        $d_return = explode("-", $tanggal_peminjaman)[2] + 7;
-        $tanggal_pengembalian = "$y_return" . "-" . "$m_return" . "-" . "$d_return";
+        // $y_return = explode("-", $tanggal_peminjaman)[0];
+        // $m_return = explode("-", $tanggal_peminjaman)[1];
+        // $d_return = explode("-", $tanggal_peminjaman)[2] + 7;
+        // $tanggal_pengembalian = "$y_return" . "-" . "$m_return" . "-" . "$d_return";
         $buku_id = $request->buku_id;
         $kondisi_buku_saat_dipinjam = $request->kondisi_buku_saat_dipinjam;
+        $user_id = $request->user_id;
+
+        // dd($request);
 
         try {
             ModelsPeminjaman::create([
                 "tanggal_peminjaman" => $tanggal_peminjaman,
-                "tanggal_pengembalian" => $tanggal_pengembalian,
+                "tanggal_pengembalian" => null,
                 "buku_id" => $buku_id,
                 "kondisi_buku_saat_dipinjam" => $kondisi_buku_saat_dipinjam,
-                "user_id" => $request->user_id
+                "user_id" => $user_id
             ]);
 
-            $buku = Buku::where('id', $request->buku_id)->first();
+            $anggota = User::find($user_id);
 
-            if ($buku->j_buku_baik >= 1 || $buku->j_buku_rusak >= 1) {
+            $buku = Buku::find($buku_id);
+
+            Pemberitahuan::create([
+                'isi' => 'Buku ' . $buku->judul . ' pada kategori ' . $buku->kategori->nama . ' telah dipinjam oleh ' . $anggota->fullname,
+                'buku_id' => $buku->id,
+                'kategori_id' => $buku->kategori_id,
+                'status' => 'aktif'
+            ]);
+
+            if ($buku->j_buku_baik >= 1 || $buku->j_buku_buruk >= 1) {
                 if ($request->kondisi_buku_saat_dipinjam == 'baik') {
 
                     $buku = Buku::where('id', $request->buku_id)->first();
@@ -79,7 +93,7 @@ class Peminjaman extends Controller
                 return redirect()->route('user.peminjaman')->with('status', 'danger')->with('message', "Gagal Meminjam Buku Stock Habis");
             }
         } catch (Exception $e) {
-            return redirect()->back()->with('status', 'danger')->with('message', "Gagal Meminjam Buku");
+            return redirect()->route('user.peminjaman')->with('status', 'danger')->with('message', "Gagal Meminjam Buku" . $e);
         }
     }
 }

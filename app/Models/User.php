@@ -37,9 +37,17 @@ class User extends Authenticatable
         return $this->hasMany(Peminjaman::class);
     }
 
-    public function pesans()
+    // public function pesans()
+    // {
+    //     return $this->hasMany(Pesan::class);
+    // }
+    public function penerima()
     {
-        return $this->hasMany(Pesan::class);
+        return $this->hasOne(Pesan::class, 'penerima_id');
+    }
+    public function pengirim()
+    {
+        return $this->hasOne(Pesan::class, 'pengirim_id');
     }
 
     /**

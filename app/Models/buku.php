@@ -25,4 +25,8 @@ class Buku extends Model
     {
         return $this->hasOne(Peminjaman::class);
     }
+    public function pemberitahuans()
+    {
+        return $this->hasMany(Pemberitahuan::class);
+    }
 }

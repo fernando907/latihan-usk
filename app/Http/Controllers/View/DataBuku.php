@@ -107,17 +107,131 @@ class DataBuku extends Controller
 
             return redirect()->route('admin.buku')->with('status', 'danger')->with('message', "Gagal Menambah Buku, " . $errors);
         }
-        try {
-            Buku::create(
-                $request->all()
-            );
-            return redirect()->route('admin.buku')->with(
-                'status',
-                'success'
-            )->with('message', 'Berhasil Menambah Buku');
-        } catch (Exception $e) {
-            return redirect()->route('admin.buku')->with('status', 'danger')->with('message', "Gagal Menambah Buku" . $e);
+
+        if ($request->photo) {
+            $imageName = time() . '.' . $request->photo->extension();
+
+            $request->photo->move(public_path('img'), $imageName);
+            try {
+                Buku::create([
+                    'judul' => $request->judul,
+                    'kategori_id' => $request->kategori_id,
+                    'penerbit_id' => $request->penerbit_id,
+                    'tahun_terbit' => $request->tahun_terbit,
+                    'isbn' => $request->isbn,
+                    'pengarang' => $request->pengarang,
+                    'j_buku_baik' => $request->j_buku_baik,
+                    'j_buku_buruk' => $request->j_buku_buruk,
+                    'photo' => "/img/" . $imageName
+                ]);
+
+                return redirect()->route('admin.buku')->with(
+                    'status',
+                    'success'
+                )->with('message', 'Berhasil Menambah Buku');
+            } catch (Exception $e) {
+                return redirect()->route('admin.buku')->with('status', 'danger')->with('message', "Gagal Menambah Buku" . $e);
+            }
         }
+        $user = Buku::create($request->all());
+
+        if ($user) {
+            return redirect()->back()->with("status", "success")->with(
+                'message',
+                'Berhasil Menambah Buku'
+            );
+        }
+        return redirect()->route('admin.buku')->with("status", "danger")->with('message', 'Gagal Menambah Buku');
+        // try {
+        //     // Buku::create(
+        //     //     $request->all()
+        //     // );
+        //     // return redirect()->route('admin.buku')->with(
+        //     //     'status',
+        //     //     'success'
+        //     // )->with('message', 'Berhasil Menambah Buku');
+
+        //     if ($request->photo != null) {
+        //         $imageName = time() . '.' . $request->photo->extension();
+    
+        //         $request->photo->move(public_path('img'), $imageName);
+    
+        //         $buku2 = Buku::find($id)->update([
+        //             "photo" => "/img/" . $imageName
+        //         ]);
+    
+        //         if ($buku && $buku2) {
+        //             return redirect()->back()->with("status", "success")->with(
+        //                 'message',
+        //                 'Berhasil Mengubah Buku'
+        //             );
+        //         }
+        //         return redirect()->back()->with("status", "danger")->with('message', 'Gagal Mengubah Buku');
+        //     }
+        //     $buku = Buku::find($id)->update($request->all());
+    
+        //     if ($buku) {
+        //         return redirect()->back()->with("status", "success")->with(
+        //             'message',
+        //             'Berhasil Mengubah Buku'
+        //         );
+        //     }
+        //     return redirect()->back()->with("status", "danger")->with('message', 'Gagal Mengubah Buku');
+        // } catch (Exception $e) {
+        //     return redirect()->route('admin.buku')->with('status', 'danger')->with('message', "Gagal Menambah Buku" . $e);
+        // }
+    }
+
+    // Update Data
+    public function update_penerbit(Request $request, $id)
+    {
+        $penerbit = Penerbit::findOrFail($id);
+        $penerbit->update($request->all());
+
+        if ($penerbit) {
+            return redirect()->back()->with('status', 'success')->with('message', 'Penerbit berhasil diubah');
+        }
+        return redirect()->back()->with('status', 'danger')->with('message', 'Penerbit gagal diubah');
+    }
+    public function update_kategori(Request $request, $id)
+    {
+        $kategori = Kategori::findOrFail($id);
+        $kategori->update($request->all());
+
+        if ($kategori) {
+            return redirect()->back()->with('status', 'success')->with('message', 'Kategori berhasil diubah');
+        }
+        return redirect()->back()->with('status', 'danger')->with('message', 'Kategori gagal diubah');
+    }
+    public function update_buku(Request $request, $id)
+    {
+        if ($request->photo != null) {
+            $imageName = time() . '.' . $request->photo->extension();
+
+            $request->photo->move(public_path('img'), $imageName);
+            $buku = Buku::find($id)->update($request->all());
+
+            $buku2 = Buku::find($id)->update([
+                "photo" => "/img/" . $imageName
+            ]);
+
+            if ($buku && $buku2) {
+                return redirect()->back()->with("status", "success")->with(
+                    'message',
+                    'Berhasil Mengubah Buku'
+                );
+            }
+            return redirect()->back()->with("status", "danger")->with('message', 'Gagal Mengubah Buku');
+        }
+        $buku = Buku::find($id)->update($request->all());
+
+        if ($buku) {
+            return redirect()->back()->with("status", "success")->with(
+                'message',
+                'Berhasil Mengubah Buku'
+            );
+        }
+        return redirect()->back()->with("status", "danger")->with('message', 'Gagal Mengubah Buku');
     }
 
     // Delete Data
@@ -127,9 +241,9 @@ class DataBuku extends Controller
         $penerbit->delete();
 
         if ($penerbit) {
-            return redirect()->back()->with('status', 'success')->with('message', 'Penerbit berhasil dihapus');
+            return redirect()->back()->with('status', 'success')->with('message', 'Penerbit berhasil diubah');
         }
-        return redirect()->back()->with('status', 'danger')->with('message', 'Penerbit gagal dihapus');
+        return redirect()->back()->with('status', 'danger')->with('message', 'Penerbit gagal diubah');
     }
     public function hapus_kategori($id)
     {

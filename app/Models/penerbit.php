@@ -9,7 +9,7 @@ class Penerbit extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['kode', 'nama', 'verif_penerbit'];
+    protected $fillable = ['kode', 'nama', 'verif'];
 
     public function bukus()
     {

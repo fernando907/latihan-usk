@@ -18,4 +18,8 @@ class Kategori extends Model
     {
         return $this->hasMany(Buku::class);
     }
+    public function pemberitahuans()
+    {
+        return $this->hasMany(Pemberitahuan::class);
+    }
 }

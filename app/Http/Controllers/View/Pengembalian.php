@@ -21,6 +21,7 @@ class Pengembalian extends Controller
     {
         $buku = Peminjaman::where('user_id', Auth::user()->id)->whereNotNull('tanggal_peminjaman')->where('done', false)->with('buku')->get();
 
+        // dd($buku);
         return view('user.form_pengembalian', compact('buku'));
     }
 
@@ -51,7 +52,7 @@ class Pengembalian extends Controller
             ]);
 
             $cek->update([
-                'denda' => 0
+                'denda' => null
             ]);
         }
 
@@ -68,7 +69,7 @@ class Pengembalian extends Controller
             ]);
         }
 
-        if ($request->kondisi_buku_saat_dikembalikan == 'rusak' && $cek->kondisi_buku_saat_dipinjam == 'rusak') {
+        if ($request->kondisi_buku_saat_dikembalikan == 'buruk' && $cek->kondisi_buku_saat_dipinjam == 'buruk') {
             $buku = Buku::where('id', $request->buku_id)->first();
 
             $buku->update([
@@ -76,7 +77,7 @@ class Pengembalian extends Controller
             ]);
 
             $cek->update([
-                'denda' => 0
+                'denda' => null
             ]);
         }
 

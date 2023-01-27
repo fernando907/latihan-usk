@@ -75,13 +75,9 @@ class RegisterController extends Controller
 
         $user = User::create([
             'kode' => $generate_code,
-            // 'nis' => $data['nis'],
             'fullname' => $data['fullname'],
             'username' => $data['username'],
             'password' => Hash::make($data['password']),
-            // 'kelas' => $data['kelas'],
-            // 'alamat' => $data['alamat'],
-            // 'photo' => $data['photo'],
             'verif' => "unverified",
             'role' => 'user',
             'join_date' => $date,
@@ -89,11 +85,4 @@ class RegisterController extends Controller
         ]);
         return response()->json(['msg' => 'Data created', 'data' => $user], 201);
     }
-    // {
-    //     return User::create([
-    //         'fullname' => $data['fullname'],
-    //         'username' => $data['username'],
-    //         'password' => Hash::make($data['password']),
-    //     ]);
-    // }
 }

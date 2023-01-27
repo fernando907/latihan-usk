@@ -13,15 +13,16 @@
             </div>
 
             <div class="card-body">
-                <form action="{{ route('user.submit_peminjaman') }}" method="POST" class="form-group">
+                <form action="{{ route('user.submit_peminjaman') }}" class="form-group" method="POST">
                     @csrf
+                    
                     <div class="mb-3">
                         <label for="">Tanggal Peminjaman</label>
                         <input type="date" name="tanggal_peminjaman" value="<?php echo $today; ?>" class="form-control">
                     </div>
 
                     <div class="mb-3">
-                        <label for="">Pilih Buku</label>
+                        <label for="buku_id">Pilih Buku</label>
 
                         <select name="buku_id" required class="form-select">
                             <option disabled selected>--Pilih Opsi--</option>

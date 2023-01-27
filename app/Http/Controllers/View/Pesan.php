@@ -81,7 +81,6 @@ class Pesan extends Controller
             'status' => 'dibaca'
         ]);
         return redirect()->back();
-        // return redirect()->route('user.pesan_masuk');
     }
 
     public function hapus_pesan($id)

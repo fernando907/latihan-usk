@@ -9,5 +9,14 @@ class Pemberitahuan extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['isi', 'level_user', 'status'];
+    protected $fillable = ['isi', 'level_user', 'status', 'kategori_id', 'buku_id'];
+
+    public function buku()
+    {
+        return $this->belongsTo(Buku::class);
+    }
+    public function kategori()
+    {
+        return $this->belongsTo(Buku::class);
+    }
 }
