@@ -9,7 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-    <link rel="shortcut icon" href="{{ asset('letter-d.ico') }}">
+    <link rel="shortcut icon" href="{{ asset('f.svg') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/main/app.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/main/app-dark.css') }}" />
     <!-- Scripts -->

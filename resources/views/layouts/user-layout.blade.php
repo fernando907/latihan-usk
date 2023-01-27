@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Perpus</title>
+    <title>E-Perpus</title>
 
     <link rel="stylesheet" href="{{ asset('assets/css/main/app.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/main/app-dark.css') }}" />
 
-    <link rel="shortcut icon" href="{{ asset('letter-d.ico') }}" type="image/png" />
+    <link rel="shortcut icon" href="{{ asset('f.svg') }}" type="image/png" />
 </head>
 
 <body>
