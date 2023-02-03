@@ -15,13 +15,13 @@ class PenerbitSeeder extends Seeder
     public function run()
     {
         Penerbit::create([
-            'kode' => 'erl',
-            'nama' => 'Erlangga'
+            'kode' => 'bp',
+            'nama' => 'Balai Pustaka.'
         ]);
         
         Penerbit::create([
-            'kode' => 'fst',
-            'nama' => 'Fantasteen'
+            'kode' => 'eb',
+            'nama' => 'Encyclopædia Britannica'
         ]);
     }
 }

@@ -15,7 +15,7 @@ class IdentitasSeeder extends Seeder
     public function run()
     {
         Identitas::create([
-            'nama_app' => 'Learn LSP Perpus',
+            'nama_app' => 'Perpus',
             'photo' => '',
             'alamat_app' => 'Jl. SMEA 6',
             'email_app' => 'smea6@gmail.com',
